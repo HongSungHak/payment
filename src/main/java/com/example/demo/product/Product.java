@@ -1,7 +1,7 @@
-package com.example.demo;
+package com.example.demo.product;
 
 
-import com.example.demo.vendor.Store;
+import com.example.demo.store.Store;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,9 +16,16 @@ public class Product {
     private Long id;
     private String name;
     private int price;
-    private int quantity;
+    private int stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
+
+    public void sell(int quantity) {
+        if (stock < quantity) {
+            throw new IllegalStateException("재고가 부족합니다.");
+        }
+        this.stock -= quantity;
+    }
 }
